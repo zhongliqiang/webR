@@ -114,10 +114,7 @@
                 navigator.msGetUserMedia;
             if (navigator.getUserMedia) {
                 // 支持
-                // 初始化 media stream.
                 navigator.getUserMedia(mediaStreamConstraints, gotLocalMediaStream, handleLocalMediaStreamError);
-                // navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-                //     .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
             } else {
                 // 不支持
             }
