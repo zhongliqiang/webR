@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>WebRTC TEST</title>
+    <style>
+        video {
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="log"></div>
+    <script src="peer.min.js"></script>
+    <script>
+        (function() {
+            var log = function(msg) {
+                document.getElementById('log').innerHTML += msg + '<br />';
+            };
+
+            var serverId = location.search.replace('?', '');
+            if (!serverId) {
+                serverId = (+new Date).toString(36) + '_' + (Math.random().toString()).split('.')[1];
+            }
+
+            history.replaceState('', '', '?' + serverId);
+
+            var peer = new Peer(serverId, {
+                host: 'qgy18.com',
+                port: 443,
+                path: '/',
+                config: {
+                    'iceServers': [{
+                        url: 'stun:stun.l.google.com:19302'
+                    }]
+                }
+            });
+
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+            var constraints = {
+                audio: false,
+                video: true
+            };
+
+            navigator.getUserMedia(constraints, function(stream) {
+                window.stream = stream;
+                log('获取摄像头成功！');
+                log('等待连接...');
+                log('<a target="_blank" href="index.html?' + serverId + '">点击进入直播页面</a>');
+            }, function(err) {
+                log('获取摄像头失败！');
+            });
+
+            peer.on('connection', function(conn) {
+                conn.on('data', function(clientId) {
+                    log('新连接：' + clientId);
+                    var call = peer.call(clientId, window.stream);
+
+                    call.on('close', function() {
+                        log('已关闭：' + clientId);
+                    });
+                });
+            });
+        })();
+    </script>
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-5422922-2', 'imququ.com');
+        ga('send', 'pageview');
+    </script>
+</body>
+
+</html>
