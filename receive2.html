@@ -14,7 +14,7 @@
 <body>
     <video id="video" autoplay="autoplay" controls="controls" style="width:480px;height:640px">
     </video>
-    <button id="start" onclick="start()">看直播</button>
+    <button id="start">看直播</button>
     <div id="log"></div>
     <script src="./peer.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script> -->
@@ -88,8 +88,7 @@
                     log('连接被关闭！');
                 });
             });
-
-            function start() {
+            document.getElementById("start").onclick = function() {
                 video.play();
             }
         })();
