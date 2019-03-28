@@ -114,7 +114,8 @@
                 peer.on('call', function(call) {
                     alert("收到 媒体流")
                         // call.answer();
-                    call.answer(mediaStream); //mediaStream媒体流
+                    console.log(call)
+                        // call.answer(mediaStream); //mediaStream媒体流
                 });
                 peer.on('disconnected', function() {
                     status.innerHTML = "Connection lost. Please reconnect";
