@@ -71,7 +71,6 @@
                 console.log(call)
                 call.answer();
                 log('自动应答！');
-
                 call.on('stream', function(remoteStream) {
                     console.log(remoteStream)
                     log('播放中...');
@@ -83,6 +82,7 @@
                         video.srcObject = remoteStream;
                         // video.src = remoteStream;
                     }
+                    video.play();
                 });
 
                 call.on('close', function() {
