@@ -60,9 +60,11 @@
                     log('播放中...');
                     var video = document.getElementById('video');
                     if (window.URL) {
-                        video.src = window.URL.createObjectURL(remoteStream);
+                        video.srcObject = remoteStream;
+                        // video.src = window.URL.createObjectURL(remoteStream);
                     } else {
-                        video.src = remoteStream;
+                        video.srcObject = remoteStream;
+                        // video.src = remoteStream;
                     }
                 });
 
