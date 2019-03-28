@@ -77,12 +77,13 @@
                     var video = document.getElementById('video');
                     if (window.URL) {
                         video.srcObject = remoteStream;
+                        video.play();
                         // video.src = window.URL.createObjectURL(remoteStream);
                     } else {
                         video.srcObject = remoteStream;
+                        video.play();
                         // video.src = remoteStream;
                     }
-                    video.play();
                 });
 
                 call.on('close', function() {
