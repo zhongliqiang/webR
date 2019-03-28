@@ -41,7 +41,7 @@
                 serverId = (+new Date).toString(36) + '_' + (Math.random().toString()).split('.')[1];
             }
 
-            history.replaceState('', '', '?' + serverId);
+            // history.replaceState('', '', '?' + serverId);    //暂时用 假 地址
             serverId = "zlq"
             var peer = new Peer(serverId, {
                 host: 'qgy18.com',
