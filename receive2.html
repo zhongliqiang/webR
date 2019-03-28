@@ -51,10 +51,12 @@
             });
 
             peer.on('call', function(call) {
+                console.log(call)
                 call.answer();
                 log('自动应答！');
 
                 call.on('stream', function(remoteStream) {
+                    console.log(remoteStream)
                     log('播放中...');
                     var video = document.getElementById('video');
                     if (window.URL) {
