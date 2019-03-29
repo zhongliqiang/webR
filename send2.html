@@ -39,7 +39,7 @@
             var sendMessageBox = document.getElementById("sendMessageBox");
             var sendButton = document.getElementById("sendButton");
             var log = document.getElementById("log");
-
+            var con = null;
             var serverId = location.search.replace('?', '');
             if (!serverId) {
                 serverId = (+new Date).toString(36) + '_' + (Math.random().toString()).split('.')[1];
@@ -82,7 +82,9 @@
                 console.log('ID: ' + peer.id);
             });
             peer.on('connection', function(conn) {
-                conn.on('data', function(clientId) {
+                alert("链接connection")
+                con = conn;
+                con.on('data', function(clientId) {
                     addMessage('新连接：' + clientId);
                     var call = peer.call(clientId, window.stream);
                     call.on('close', function() {
@@ -95,7 +97,7 @@
                 // if (conn.open) {
                 var msg = sendMessageBox.value;
                 sendMessageBox.value = "";
-                conn.send(msg);
+                con.send(msg);
                 console.log("Sent: " + msg);
                 addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
                 // }
