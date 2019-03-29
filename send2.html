@@ -12,7 +12,12 @@
 </head>
 
 <body>
-    <div id="log"></div>
+    <div>
+        <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
+        <button type="button" id="sendButton">Send</button>
+    </div>
+    <div id="log" style="height: 200px;width:200px; overflow: scroll;"></div>
+    <div id="message" style="height: 200px;width:200px; overflow: scroll;"></div>
     <script src="./peer.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script> -->
     <!-- <script>
@@ -32,6 +37,9 @@
     </script> -->
     <script>
         (function() {
+            var sendMessageBox = document.getElementById("sendMessageBox");
+            var sendButton = document.getElementById("sendButton");
+            var message = document.getElementById("message");
             var log = function(msg) {
                 document.getElementById('log').innerHTML += msg + '<br />';
             };
@@ -74,12 +82,40 @@
                 conn.on('data', function(clientId) {
                     log('新连接：' + clientId);
                     var call = peer.call(clientId, window.stream);
-
                     call.on('close', function() {
                         log('已关闭：' + clientId);
                     });
                 });
             });
+            sendButton.onclick = function() {
+                if (conn.open) {
+                    var msg = sendMessageBox.value;
+                    sendMessageBox.value = "";
+                    conn.send(msg);
+                    console.log("Sent: " + msg);
+                    addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
+                }
+            };
+
+            function addMessage(msg) {
+                var now = new Date();
+                var h = now.getHours();
+                var m = addZero(now.getMinutes());
+                var s = addZero(now.getSeconds());
+
+                if (h > 12)
+                    h -= 12;
+                else if (h === 0)
+                    h = 12;
+
+                function addZero(t) {
+                    if (t < 10)
+                        t = "0" + t;
+                    return t;
+                };
+
+                message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
+            };
         })();
     </script>
 
