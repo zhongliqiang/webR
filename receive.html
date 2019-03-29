@@ -77,10 +77,16 @@
              */
             function initialize() {
                 // Create own peer object with connection to shared PeerJS server
-                peer = new Peer(null, {
-                    debug: 2
+                peer = new Peer(serverId, {
+                    host: 'qgy18.com',
+                    port: 443,
+                    path: '/',
+                    config: {
+                        'iceServers': [{
+                            url: 'stun:stun.l.google.com:19302'
+                        }]
+                    }
                 });
-
                 peer.on('open', function(id) {
                     // Workaround for peer.reconnect deleting previous id
                     if (peer.id === null) {
