@@ -83,7 +83,6 @@
             peer.on('connection', function(conn) {
                 con = conn;
                 con.on('data', function(clientId) {
-                    console.log("收到新DATA")
                     addMessage('新连接：' + clientId);
                     var call = peer.call(clientId, window.stream);
                     // call.on('close', function() {

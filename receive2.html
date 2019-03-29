@@ -67,7 +67,6 @@
             console.log(location.search)
             console.log(serverId)
             if (!serverId) {
-                // alert('没有找到直播信源！!');
                 // location.href = 'receive2.html';
                 console.log("没有serverId")
                 return;
@@ -83,7 +82,6 @@
             //         reliable: true
             //     });
             conn.on('data', function(data) {
-                alert("jieshoudata")
                 addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
             });
             peer.on('call', function(call) {
