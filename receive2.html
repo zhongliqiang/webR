@@ -58,6 +58,9 @@
                 //         }]
                 //     }
                 // });
+            var peer = new Peer({
+                key: "6666666666666"
+            })
             peer.on('open', function(id) {
                 if (peer.id === null) {
                     peer.id = lastPeerId;
