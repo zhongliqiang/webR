@@ -14,6 +14,10 @@
 <body>
     <video id="video" autoplay="autoplay" controls="controls" style="width:480px;height:640px">
     </video>
+    <div>
+        <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
+        <button type="button" id="sendButton">Send</button>
+    </div>
     <button id="start">看直播</button>
     <div id="log"></div>
     <script src="./peer.min.js"></script>
@@ -36,10 +40,9 @@
     <script>
         (function() {
             var video = document.getElementById('video');
-            var log = function(msg) {
-                document.getElementById('log').innerHTML += msg + '<br />';
-            };
-
+            var message = document.getElementById("message");
+            var sendMessageBox = document.getElementById("sendMessageBox");
+            var sendButton = document.getElementById("sendButton");
             var clientId = (+new Date).toString(36) + '_' + (Math.random().toString()).split('.')[1];
 
             var peer = new Peer(clientId, {
@@ -52,7 +55,15 @@
                     }]
                 }
             });
-
+            peer.on('open', function(id) {
+                // Workaround for peer.reconnect deleting previous id
+                if (peer.id === null) {
+                    peer.id = lastPeerId;
+                } else {
+                    // lastPeerId = peer.id;
+                }
+                console.log('我得ID: ' + peer.id);
+            });
             var serverId = location.search.replace('?', '');
 
             if (!serverId) {
@@ -62,20 +73,24 @@
             }
 
             var conn = peer.connect(serverId);
-
-            log('连接直播信源中...');
+            addMessage('连接直播信源中...');
             conn.on('open', function() {
-                log('请求连接（' + clientId + '）...');
+                addMessage('请求连接（' + clientId + '）...');
                 conn.send(clientId);
             });
-
+            // conn = peer.connect(recvIdInput.value, {
+            //         reliable: true
+            //     });
+            conn.on('data', function(data) {
+                addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
+            });
             peer.on('call', function(call) {
                 console.log(call)
                 call.answer();
-                log('自动应答！');
+                addMessage('自动应答！');
                 call.on('stream', function(remoteStream) {
                     console.log(remoteStream)
-                    log('播放中...');
+                    addMessage('播放中...');
 
                     if (window.URL) {
                         video.srcObject = remoteStream;
@@ -85,12 +100,44 @@
                 });
 
                 call.on('close', function() {
-                    log('连接被关闭！');
+                    addMessage('连接被关闭！');
                 });
             });
+            sendButton.onclick = function() {
+                if (conn.open) {
+                    var msg = sendMessageBox.value;
+                    sendMessageBox.value = "";
+                    conn.send(msg);
+                    console.log("Sent: " + msg);
+                    addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
+                }
+            };
             document.getElementById("start").onclick = function() {
                 video.play();
             }
+
+
+
+
+            function addMessage(msg) {
+                var now = new Date();
+                var h = now.getHours();
+                var m = addZero(now.getMinutes());
+                var s = addZero(now.getSeconds());
+
+                if (h > 12)
+                    h -= 12;
+                else if (h === 0)
+                    h = 12;
+
+                function addZero(t) {
+                    if (t < 10)
+                        t = "0" + t;
+                    return t;
+                };
+                // message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
+                document.getElementById('log').innerHTML += h + ":" + m + ":" + s + "-----" + msg + '<br />';
+            };
         })();
     </script>
 

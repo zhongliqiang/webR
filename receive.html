@@ -100,13 +100,13 @@
                     recvId.innerHTML = "ID: " + peer.id;
                     status.innerHTML = "Awaiting connection...";
                 });
-                peer.on('connection', function(c) {
+                peer.on('connection', function(conn) {
                     // Allow only a single connection
                     if (conn) {
-                        c.on('open', function() {
-                            c.send("Already connected to another client");
+                        conn.on('open', function() {
+                            conn.send("Already connected to another client");
                             setTimeout(function() {
-                                c.close();
+                                conn.close();
                             }, 500);
                         });
                         return;

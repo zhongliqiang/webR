@@ -13,11 +13,10 @@
 
 <body>
     <div>
-        <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
+        <input type="text" id="sendMessageBox" placeholder="Enter a log..." autofocus="true" />
         <button type="button" id="sendButton">Send</button>
     </div>
     <div id="log" style="height: 200px;width:200px; overflow: scroll;"></div>
-    <div id="message" style="height: 200px;width:200px; overflow: scroll;"></div>
     <script src="./peer.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script> -->
     <!-- <script>
@@ -39,10 +38,7 @@
         (function() {
             var sendMessageBox = document.getElementById("sendMessageBox");
             var sendButton = document.getElementById("sendButton");
-            var message = document.getElementById("message");
-            var log = function(msg) {
-                document.getElementById('log').innerHTML += msg + '<br />';
-            };
+            var log = document.getElementById("log");
 
             var serverId = location.search.replace('?', '');
             if (!serverId) {
@@ -71,30 +67,38 @@
 
             navigator.getUserMedia(constraints, function(stream) {
                 window.stream = stream;
-                log('获取摄像头成功！');
-                log('等待连接...');
-                log('<a target="_blank" href="receive2.html?' + serverId + '">点击进入直播页面</a>');
+                addMessage('获取摄像头成功！');
+                addMessage('等待连接...');
+                addMessage('<a target="_blank" href="receive2.html?' + serverId + '">点击进入直播页面</a>');
             }, function(err) {
-                log('获取摄像头失败！');
+                addMessage('获取摄像头失败！');
             });
-
+            peer.on('open', function(id) {
+                if (peer.id === null) {
+                    peer.id = lastPeerId;
+                } else {
+                    // lastPeerId = peer.id;
+                }
+                console.log('ID: ' + peer.id);
+            });
             peer.on('connection', function(conn) {
                 conn.on('data', function(clientId) {
-                    log('新连接：' + clientId);
+                    addMessage('新连接：' + clientId);
                     var call = peer.call(clientId, window.stream);
                     call.on('close', function() {
-                        log('已关闭：' + clientId);
+                        addMessage('已关闭：' + clientId);
                     });
+                    addMessage(clientId);
                 });
             });
             sendButton.onclick = function() {
-                if (conn.open) {
-                    var msg = sendMessageBox.value;
-                    sendMessageBox.value = "";
-                    conn.send(msg);
-                    console.log("Sent: " + msg);
-                    addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
-                }
+                // if (conn.open) {
+                var msg = sendMessageBox.value;
+                sendMessageBox.value = "";
+                conn.send(msg);
+                console.log("Sent: " + msg);
+                addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
+                // }
             };
 
             function addMessage(msg) {
@@ -114,7 +118,7 @@
                     return t;
                 };
 
-                message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
+                log.innerHTML += "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg;
             };
         })();
     </script>
