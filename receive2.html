@@ -48,16 +48,16 @@
             var sendButton = document.getElementById("sendButton");
             // var clientId = (+new Date).toString(36) + '_' + (Math.random().toString()).split('.')[1];
             var clientId = "```"
-                // var peer = new Peer(clientId, {
-                //     host: 'qgy18.com',
-                //     port: 443,
-                //     path: '/',
-                //     config: {
-                //         'iceServers': [{
-                //             url: 'stun:stun.l.google.com:19302'
-                //         }]
-                //     }
-                // });
+            var peer = new Peer(clientId, {
+                host: 'qgy18.com',
+                port: 443,
+                path: '/',
+                config: {
+                    'iceServers': [{
+                        url: 'stun:stun.l.google.com:19302'
+                    }]
+                }
+            });
             var peer = new Peer({
                 key: "6666666666666"
             })
