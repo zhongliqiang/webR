@@ -59,16 +59,13 @@
                 }
             });
             peer.on('open', function(id) {
-                // Workaround for peer.reconnect deleting previous id
                 if (peer.id === null) {
                     peer.id = lastPeerId;
-                } else {
-                    // lastPeerId = peer.id;
-                }
-                console.log('我得ID: ' + peer.id);
+                } else {}
             });
             var serverId = location.search.replace('?', '');
-
+            console.log(location.search)
+            console.log(serverId)
             if (!serverId) {
                 // alert('没有找到直播信源！!');
                 // location.href = 'receive2.html';
@@ -90,13 +87,10 @@
                 addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
             });
             peer.on('call', function(call) {
-                console.log(call)
                 call.answer();
                 addMessage('自动应答！');
                 call.on('stream', function(remoteStream) {
-                    console.log(remoteStream)
                     addMessage('播放中...');
-
                     if (window.URL) {
                         video.srcObject = remoteStream;
                     } else {

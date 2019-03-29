@@ -79,17 +79,16 @@
                 } else {
                     // lastPeerId = peer.id;
                 }
-                console.log('ID: ' + peer.id);
             });
             peer.on('connection', function(conn) {
-                alert("链接connection")
                 con = conn;
                 con.on('data', function(clientId) {
+                    console.log("收到新DATA")
                     addMessage('新连接：' + clientId);
                     var call = peer.call(clientId, window.stream);
-                    call.on('close', function() {
-                        addMessage('已关闭：' + clientId);
-                    });
+                    // call.on('close', function() {
+                    //     addMessage('已关闭：' + clientId);
+                    // });
                     addMessage(clientId);
                 });
             });
