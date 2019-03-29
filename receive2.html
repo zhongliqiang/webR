@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height:100%">
 
 <head>
     <meta charset="utf-8" />
@@ -11,15 +11,18 @@
     </style>
 </head>
 
-<body>
-    <video id="video" autoplay="autoplay" controls="controls" style="width:480px;height:640px">
-    </video>
-    <div>
+<body style="margin:0;padding:0;height:100%">
+    <div style="width:480px;height:700px;float:left">
+        <video id="video" autoplay="autoplay" controls="controls" style="width:480px;height:640px;">
+        </video>
+        <div></div>
+        <button id="start">看直播</button>
+    </div>
+    <div style="width:480px;height:640px;float: right;">
         <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
         <button type="button" id="sendButton">Send</button>
+        <div id="log" style="width:100%;height:calc(100% - 50px)"></div>
     </div>
-    <button id="start">看直播</button>
-    <div id="log"></div>
     <script src="./peer.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script> -->
     <!-- <script>
@@ -67,8 +70,8 @@
             var serverId = location.search.replace('?', '');
 
             if (!serverId) {
-                alert('没有找到直播信源！!');
-                location.href = 'receive2.html';
+                // alert('没有找到直播信源！!');
+                // location.href = 'receive2.html';
                 return;
             }
 

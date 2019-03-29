@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height:100%">
 
 <head>
     <meta charset="utf-8" />
@@ -11,12 +11,12 @@
     </style>
 </head>
 
-<body>
+<body style="margin:0;padding:0;height:100%">
     <div>
         <input type="text" id="sendMessageBox" placeholder="Enter a log..." autofocus="true" />
         <button type="button" id="sendButton">Send</button>
     </div>
-    <div id="log" style="height: 200px;width:200px; overflow: scroll;"></div>
+    <div id="log" style="height:calc(100% - 50px);width:100%; overflow: scroll;"></div>
     <script src="./peer.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script> -->
     <!-- <script>
